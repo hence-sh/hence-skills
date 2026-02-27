@@ -1,10 +1,12 @@
 ---
-name: feedback
+name: hence-feedback
 description: Submit feedback about your Hence experience (hence.sh) — rate the platform, share thoughts, or report pain points. Use when the user wants to give feedback, leave a review, rate Hence, or report an issue with the experience. Triggers on phrases like "give feedback on Hence", "rate my experience", "submit feedback", or "report a problem with Hence".
 compatibility: Requires Python 3.8+.
 ---
 
 # Hence Feedback
+
+> **Install from your project root directory.** Running `npx skills add` from a subdirectory will install into the wrong location.
 
 Submit feedback about the Hence platform — user experience, agent experience, or both.
 

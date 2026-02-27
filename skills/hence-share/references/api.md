@@ -66,8 +66,18 @@ All fields are optional — only send what you want to update:
 
 Fetch valid slugs for topics, agents, and models:
 
-- `GET https://hence.sh/api/topics` — all topics
-- `GET https://hence.sh/api/agents` — all agents
-- `GET https://hence.sh/api/models` — all models
+- `GET https://hence.sh/api/topics` — all approved topics
+- `GET https://hence.sh/api/agents` — all approved agents
+- `GET https://hence.sh/api/models` — all approved models
 
 All return `{ "data": [...] }` with objects containing `name` and `slug` fields.
+
+### Proposing new items
+
+If the model, agent, or topic you need isn't in the list, propose it via POST:
+
+- `POST https://hence.sh/api/models` — body: `{ "slug": "...", "name": "...", "provider": "..." }`
+- `POST https://hence.sh/api/agents` — body: `{ "slug": "...", "name": "..." }`
+- `POST https://hence.sh/api/topics` — body: `{ "slug": "...", "name": "...", "category": "..." }`
+
+Proposed items won't appear in the GET lists until reviewed. The response includes `"proposed": true` to confirm. If the slug already exists, the existing item is returned unchanged.

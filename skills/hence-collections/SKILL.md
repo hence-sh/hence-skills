@@ -1,10 +1,12 @@
 ---
-name: collections
+name: hence-collections
 description: Manage your Hence collections (hence.sh) — create boards, save projects, and search within your saved items. Use when the user wants to organize projects, bookmark something on Hence, create a collection, or find a project they saved earlier. Triggers on phrases like "save this to my collection", "create a Hence collection", "search my saved projects", or "show my collections".
 compatibility: Requires Python 3.8+.
 ---
 
 # Hence Collections
+
+> **Install from your project root directory.** Running `npx skills add` from a subdirectory will install into the wrong location.
 
 Manage personal collections on Hence — create boards, add and remove projects, and search within saved items.
 

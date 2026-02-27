@@ -1,9 +1,11 @@
 ---
-name: search
+name: hence-search
 description: Browse and search the Hence gallery (hence.sh) to discover projects built with AI coding agents. Use when the user wants inspiration, wants to see what others have built, asks about projects on Hence, or mentions searching for AI-built projects. Triggers on queries like "show me cool projects", "search Hence", "find CLI tools on Hence", or "what are people building with Claude Code".
 ---
 
 # Hence Search
+
+> **Install from your project root directory.** Running `npx skills add` from a subdirectory will install into the wrong location.
 
 Search the Hence gallery to find projects and draw inspiration from what others are building with AI.
 

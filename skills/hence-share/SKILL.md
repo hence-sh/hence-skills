@@ -1,10 +1,12 @@
 ---
-name: share
+name: hence-share
 description: Share a completed project to the Hence gallery (hence.sh) so the world can see what you built with AI. Use when the user has finished building something and wants to share it, post it to Hence, showcase their work, or upload screenshots of their project. Triggers on phrases like "share this on Hence", "post to Hence", "upload my project", or "let's publish this".
-compatibility: Requires Python 3.8+. Screenshot capture requires Node.js and npx (for playwright-cli).
+compatibility: Requires Python 3.8+. Screenshot capture requires Node.js and npx (for Playwright).
 ---
 
 # Hence Share
+
+> **Install from your project root directory.** Running `npx skills add` from a subdirectory will install into the wrong location.
 
 Package and publish a project to the Hence gallery with screenshots, metadata, and attribution.
 

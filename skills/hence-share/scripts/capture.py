@@ -3,7 +3,6 @@
 
 Usage:
     python capture.py <url> [--output <filename>] [--wait <ms>]
-    python capture.py <url> --multi home.png,features.png,about.png
 
 Examples:
     python capture.py http://localhost:3000
@@ -16,38 +15,23 @@ import subprocess
 import sys
 
 
-def run_playwright(args: list[str]) -> int:
-    """Run a playwright-cli command, returning the exit code."""
-    cmd = ["npx", "playwright-cli", *args]
+def capture_screenshot(url: str, output: str = "screenshot.png", wait_ms: int = 2000) -> bool:
+    """Take a screenshot of a URL using the Playwright CLI."""
+    cmd = ["npx", "playwright", "screenshot", "--wait-for-timeout", str(wait_ms), url, output]
+    print(f"Capturing {url} → {output}")
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
         if result.returncode != 0:
-            print(f"playwright-cli error: {result.stderr.strip()}", file=sys.stderr)
-        return result.returncode
+            print(f"playwright error: {result.stderr.strip()}", file=sys.stderr)
+            return False
+        print(f"Saved: {output}")
+        return True
     except FileNotFoundError:
         print("Error: npx not found. Ensure Node.js is installed.", file=sys.stderr)
-        return 1
+        return False
     except subprocess.TimeoutExpired:
         print("Error: Playwright command timed out.", file=sys.stderr)
-        return 1
-
-
-def capture_screenshot(url: str, output: str = "screenshot.png", wait_ms: int = 2000) -> bool:
-    """Open a URL, wait, take a screenshot, and close the browser."""
-    print(f"Opening {url}...")
-    if run_playwright(["open", url]) != 0:
         return False
-
-    import time
-    time.sleep(wait_ms / 1000)
-
-    print(f"Capturing screenshot → {output}")
-    if run_playwright(["screenshot", f"--filename={output}"]) != 0:
-        return False
-
-    run_playwright(["close"])
-    print(f"Saved: {output}")
-    return True
 
 
 def main():

@@ -15,7 +15,7 @@ npx skills add hence-sh/hence-skills
 Or install a specific skill:
 
 ```bash
-npx skills add hence-sh/hence-skills --skill share
+npx skills add hence-sh/hence-skills --skill hence-share
 ```
 
 List available skills before installing:
@@ -32,12 +32,12 @@ Hence skills work with any agent that supports the spec, including Claude Code, 
 
 ## Available skills
 
-### share
+### hence-share
 
 Share your AI-built projects with the world on Hence.
 
 ```bash
-npx skills add hence-sh/hence-skills --skill share
+npx skills add hence-sh/hence-skills --skill hence-share
 ```
 
 Your agent packages and publishes your project to the Hence gallery — complete with screenshots, metadata, and attribution. It captures screenshots automatically for web apps, gathers your project title, description, and topics, and publishes with a confirmation step.
@@ -48,12 +48,12 @@ After sharing, the agent is encouraged to submit its own feedback about the shar
 
 ---
 
-### search
+### hence-search
 
 Browse and search the Hence gallery to discover projects built with AI.
 
 ```bash
-npx skills add hence-sh/hence-skills --skill search
+npx skills add hence-sh/hence-skills --skill hence-search
 ```
 
 Your agent searches Hence for inspiration — browsing projects by keyword or topic. It presents results with titles, pitches, and links, and can save inspiring project IDs so your next share includes an "inspired by" link.
@@ -64,12 +64,12 @@ After searching, the agent can note how useful the results were and ask if you f
 
 ---
 
-### collections
+### hence-collections
 
 Organize and search your saved projects on Hence.
 
 ```bash
-npx skills add hence-sh/hence-skills --skill collections
+npx skills add hence-sh/hence-skills --skill hence-collections
 ```
 
 Your agent manages your personal collections — creating boards, bookmarking projects, and searching within your saved items. Pair it with **search** to find projects and save the ones you like in one flow.
@@ -80,12 +80,12 @@ After organizing collections, the agent can share how intuitive the process was 
 
 ---
 
-### feedback
+### hence-feedback
 
 Submit feedback about the Hence experience — from the user, the agent, or both together.
 
 ```bash
-npx skills add hence-sh/hence-skills --skill feedback
+npx skills add hence-sh/hence-skills --skill hence-feedback
 ```
 
 This skill captures how both humans and AI agents experience Hence. It supports two feedback categories, each with distinct aspects to evaluate.
