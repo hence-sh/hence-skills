@@ -4,6 +4,26 @@ Agent skills for searching, sharing, organizing, and giving feedback on [Hence](
 
 Hence skills let your AI coding agent interact with the Hence gallery directly — searching for inspiration, sharing what you build, and giving feedback, all without leaving your workflow.
 
+## Install
+
+Install all skills at once:
+
+```bash
+npx skills add hence-sh/hence-skills
+```
+
+Or install a specific skill:
+
+```bash
+npx skills add hence-sh/hence-skills --skill share
+```
+
+List available skills before installing:
+
+```bash
+npx skills add hence-sh/hence-skills --list
+```
+
 ## What are skills?
 
 Skills are packages that give AI coding agents new capabilities. They follow the [Agent Skills Specification](https://agentskills.io/specification) — an open standard for distributing tools that agents can install and use autonomously.
@@ -12,12 +32,12 @@ Hence skills work with any agent that supports the spec, including Claude Code, 
 
 ## Available skills
 
-### hence-share
+### share
 
 Share your AI-built projects with the world on Hence.
 
 ```bash
-npx skills add hence-sh/hence-share
+npx skills add hence-sh/hence-skills --skill share
 ```
 
 Your agent packages and publishes your project to the Hence gallery — complete with screenshots, metadata, and attribution. It captures screenshots automatically for web apps, gathers your project title, description, and topics, and publishes with a confirmation step.
@@ -25,16 +45,15 @@ Your agent packages and publishes your project to the Hence gallery — complete
 After sharing, the agent is encouraged to submit its own feedback about the sharing experience and to ask you how it went — helping Hence improve for both humans and agents.
 
 - **Requires:** Python 3.8+, Node.js (for screenshots)
-- **GitHub:** [hence-sh/hence-share](https://github.com/hence-sh/hence-share)
 
 ---
 
-### hence-search
+### search
 
 Browse and search the Hence gallery to discover projects built with AI.
 
 ```bash
-npx skills add hence-sh/hence-search
+npx skills add hence-sh/hence-skills --skill search
 ```
 
 Your agent searches Hence for inspiration — browsing projects by keyword or topic. It presents results with titles, pitches, and links, and can save inspiring project IDs so your next share includes an "inspired by" link.
@@ -42,33 +61,31 @@ Your agent searches Hence for inspiration — browsing projects by keyword or to
 After searching, the agent can note how useful the results were and ask if you found what you were looking for — both perspectives help improve discovery.
 
 - **Requires:** Python 3.8+
-- **GitHub:** [hence-sh/hence-search](https://github.com/hence-sh/hence-search)
 
 ---
 
-### hence-collections
+### collections
 
 Organize and search your saved projects on Hence.
 
 ```bash
-npx skills add hence-sh/hence-collections
+npx skills add hence-sh/hence-skills --skill collections
 ```
 
-Your agent manages your personal collections — creating boards, bookmarking projects, and searching within your saved items. Pair it with **hence-search** to find projects and save the ones you like in one flow.
+Your agent manages your personal collections — creating boards, bookmarking projects, and searching within your saved items. Pair it with **search** to find projects and save the ones you like in one flow.
 
 After organizing collections, the agent can share how intuitive the process was and check whether the collection structure works for you.
 
 - **Requires:** Python 3.8+
-- **GitHub:** [hence-sh/hence-collections](https://github.com/hence-sh/hence-collections)
 
 ---
 
-### hence-feedback
+### feedback
 
 Submit feedback about the Hence experience — from the user, the agent, or both together.
 
 ```bash
-npx skills add hence-sh/hence-feedback
+npx skills add hence-sh/hence-skills --skill feedback
 ```
 
 This skill captures how both humans and AI agents experience Hence. It supports two feedback categories, each with distinct aspects to evaluate.
@@ -97,16 +114,15 @@ This skill captures how both humans and AI agents experience Hence. It supports 
 Each submission can include a 1–5 star rating, a free-form comment, or both. The agent can optionally note which skill it was using when giving feedback.
 
 - **Requires:** Python 3.8+
-- **GitHub:** [hence-sh/hence-feedback](https://github.com/hence-sh/hence-feedback)
 
 ---
 
 ## Getting started
 
 1. [Sign in](https://hence.sh/login) to Hence with GitHub or Google.
-2. Install a skill in your agent session:
+2. Install skills in your agent session:
    ```bash
-   npx skills add hence-sh/hence-share
+   npx skills add hence-sh/hence-skills
    ```
 3. On first use, your agent starts an OAuth device flow — it prints a code, you approve it in your browser, and you're connected.
 4. Tell your agent what to do:
@@ -117,9 +133,9 @@ Each submission can include a 1–5 star rating, a free-form comment, or both. T
 
 ## Skills work together
 
-The skills complement each other. Find a project via **hence-search**, save it to a board with **hence-collections**, and when you share your own project with **hence-share**, it can include an "inspired by" link — creating a chain of creative influence across the gallery. Search within your collections later to revisit saved inspiration.
+The skills complement each other. Find a project via **search**, save it to a board with **collections**, and when you share your own project with **share**, it can include an "inspired by" link — creating a chain of creative influence across the gallery. Search within your collections later to revisit saved inspiration.
 
-After using any skill, your agent can use **hence-feedback** to report how the experience went — both its own assessment and yours. This dual-perspective feedback loop helps Hence improve for humans and agents alike.
+After using any skill, your agent can use **feedback** to report how the experience went — both its own assessment and yours. This dual-perspective feedback loop helps Hence improve for humans and agents alike.
 
 ## Requirements
 
