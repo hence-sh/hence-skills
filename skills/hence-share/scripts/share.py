@@ -5,9 +5,10 @@ Usage:
     python share.py --title "Name" --one-liner "Pitch" --screenshot hero.png \
         [--description "..."] [--topics '["cli"]'] [--agents '[{"slug":"claude_code","model_slug":"claude-sonnet-4"}]'] \
         [--url "https://..."] [--deployment-status "public"] [--inspired-by <id>] \
-        [--screenshot feature.png] [--yes]
+        [--screenshot feature.png:"Features view"] [--yes]
 
 Screenshots: Pass --screenshot multiple times (max 5). The first is the primary screenshot.
+Use path:Caption format to attach a caption (split on first colon).
 """
 
 import argparse
@@ -24,18 +25,21 @@ from auth import get_token
 API_URL = os.environ.get("HENCE_API_URL", "https://hence.sh") + "/api/projects"
 
 
-def build_multipart(fields: dict, files: list[tuple[str, str]]) -> tuple[bytes, str]:
-    """Build a multipart/form-data body from fields and files.
+def build_multipart(
+    text_fields: list[tuple[str, str]],
+    file_fields: list[tuple[str, str]],
+) -> tuple[bytes, str]:
+    """Build a multipart/form-data body.
 
-    fields: dict of name → string value
-    files: list of (field_name, file_path) tuples
+    text_fields: list of (name, value) tuples — allows repeated field names
+    file_fields: list of (field_name, file_path) tuples
     Returns: (body_bytes, content_type)
     """
     import uuid
     boundary = f"----SkillBoundary{uuid.uuid4().hex}"
 
     parts = []
-    for name, value in fields.items():
+    for name, value in text_fields:
         if value is None:
             continue
         parts.append(
@@ -44,7 +48,7 @@ def build_multipart(fields: dict, files: list[tuple[str, str]]) -> tuple[bytes, 
             f"{value}\r\n"
         )
 
-    for field_name, filepath in files:
+    for field_name, filepath in file_fields:
         filename = os.path.basename(filepath)
         with open(filepath, "rb") as f:
             data = f.read()
@@ -68,6 +72,18 @@ def build_multipart(fields: dict, files: list[tuple[str, str]]) -> tuple[bytes, 
     return body, f"multipart/form-data; boundary={boundary}"
 
 
+def parse_screenshot_arg(arg: str) -> tuple[str, str]:
+    """Parse a --screenshot argument as 'path' or 'path:Caption text'.
+
+    Splits on the first colon only, so captions can contain colons.
+    Returns (path, caption).
+    """
+    if ":" in arg:
+        path, caption = arg.split(":", 1)
+        return path.strip(), caption.strip()
+    return arg.strip(), ""
+
+
 def share_project(
     token: str,
     title: str,
@@ -81,29 +97,28 @@ def share_project(
     inspired_by_id: str = "",
 ) -> dict:
     """Upload a project to Hence and return the response."""
-    fields = {
-        "title": title,
-        "one_liner": one_liner,
-        "description": description,
-        "topics": topics,
-        "agents": agents,
-        "url": url,
-        "deployment_status": deployment_status,
-    }
+    text_fields: list[tuple[str, str]] = [
+        ("title", title),
+        ("one_liner", one_liner),
+        ("description", description),
+        ("topics", topics),
+        ("agents", agents),
+        ("url", url),
+        ("deployment_status", deployment_status),
+    ]
     if inspired_by_id:
-        fields["inspired_by_id"] = inspired_by_id
+        text_fields.append(("inspired_by_id", inspired_by_id))
 
-    files = []
-    for i, path in enumerate(screenshots[:5]):
+    file_fields = []
+    for raw in screenshots:
+        path, caption = parse_screenshot_arg(raw)
         if not os.path.isfile(path):
             print(f"Error: Screenshot not found: {path}", file=sys.stderr)
             sys.exit(1)
-        if i == 0:
-            files.append(("primary_screenshot", path))
-        else:
-            files.append((f"screenshot_{i}", path))
+        text_fields.append(("screenshot_caption", caption))
+        file_fields.append(("screenshot", path))
 
-    body, content_type = build_multipart(fields, files)
+    body, content_type = build_multipart(text_fields, file_fields)
 
     req = urllib.request.Request(
         API_URL,

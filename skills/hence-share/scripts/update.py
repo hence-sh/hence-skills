@@ -3,9 +3,10 @@
 
 Usage:
     python update.py <project_id> [--title "New Title"] [--one-liner "New pitch"] \
-        [--screenshot new.png] [--topics '["cli"]'] [--agents '[...]']
+        [--topics '["cli"]'] [--agents '[...]'] [--yes]
 
 Only pass the fields you want to update.
+To manage screenshots, use screenshots.py instead.
 """
 
 import argparse
@@ -62,7 +63,6 @@ def update_project(
     project_id: str,
     title: str = "",
     one_liner: str = "",
-    screenshot: str = "",
     topics: str = "",
     agents: str = "",
 ) -> dict:
@@ -77,15 +77,11 @@ def update_project(
     if agents:
         fields["agents"] = agents
 
-    files = []
-    if screenshot and os.path.isfile(screenshot):
-        files.append(("primary_screenshot", screenshot))
-
-    if not fields and not files:
+    if not fields:
         print("Error: Nothing to update. Pass at least one field.", file=sys.stderr)
         sys.exit(1)
 
-    body, content_type = build_multipart(fields, files)
+    body, content_type = build_multipart(fields, [])
 
     url = f"{API_BASE}/{project_id}"
     req = urllib.request.Request(
@@ -115,19 +111,34 @@ def main():
     parser.add_argument("project_id", help="UUID of the project to update")
     parser.add_argument("--title", default="", help="New title")
     parser.add_argument("--one-liner", default="", help="New pitch")
-    parser.add_argument("--screenshot", default="", help="New primary screenshot path")
     parser.add_argument("--topics", default="", help='JSON array of topic slugs')
     parser.add_argument("--agents", default="", help='JSON array of agent objects')
+    parser.add_argument("--yes", "-y", action="store_true", help="Skip confirmation prompt")
     args = parser.parse_args()
 
     token = get_token()
+
+    updates = []
+    if args.title: updates.append(f"  Title:       {args.title}")
+    if args.one_liner: updates.append(f"  One-liner:   {args.one_liner}")
+    if args.topics: updates.append(f"  Topics:      {args.topics}")
+    if args.agents: updates.append(f"  Agents:      {args.agents}")
+    print(f"--- Updating project {args.project_id} ---")
+    for line in updates:
+        print(line)
+    print("--------------------------------------")
+
+    if not args.yes:
+        confirm = input("Apply these updates? (y/N): ").strip().lower()
+        if confirm != "y":
+            print("Cancelled.")
+            sys.exit(0)
 
     result = update_project(
         token=token,
         project_id=args.project_id,
         title=args.title,
         one_liner=args.one_liner,
-        screenshot=args.screenshot,
         topics=args.topics,
         agents=args.agents,
     )
