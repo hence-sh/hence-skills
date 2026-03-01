@@ -134,10 +134,10 @@ def start_device_flow() -> None:
     print()
     print("To authenticate, open this URL in your browser and enter the code:")
     print()
+    print("If you're not already logged in, you'll be prompted to sign in first.")
+    print()
     print(f"  URL:   {verification_uri}")
     print(f"  Code:  {user_code}")
-    print()
-    print("If you're not already logged in, you'll be prompted to sign in first.")
     print()
     print("Waiting for authorization...", end="", flush=True)
 
