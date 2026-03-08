@@ -32,12 +32,6 @@ The script will print a URL and a one-time code. **Before running the command, t
 
 The script will wait and automatically complete once the user approves. No further action is needed from the agent after that.
 
-For CI/CD environments, pass an API key directly:
-
-```bash
-python scripts/auth.py <api-key>
-```
-
 ### 1. Determine search strategy
 
 - **Specific query** (e.g. "Rust CLI tools"): run `search.py` directly with keywords.

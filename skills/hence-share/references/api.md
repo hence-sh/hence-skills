@@ -4,7 +4,7 @@
 
 **Endpoint:** `POST https://hence.sh/api/projects`
 
-**Authentication:** `Authorization: Bearer <token>` header required. Get a token at [hence.sh/settings](https://hence.sh/settings).
+**Authentication:** `Authorization: Bearer <token>` header required. Run `auth.py` to authenticate via device flow.
 
 **Content-Type:** `multipart/form-data`
 

@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 """Authenticate with the Hence API.
 
-Supports two modes:
-  - Device flow (interactive): prints a code, user approves in browser
-  - API key (CI/CD): pass a key directly
-
 Usage:
     python auth.py                  # Start device flow (interactive)
-    python auth.py <token>          # Save API key (for CI/CD)
     python auth.py --check          # Verify credentials exist
 """
 
@@ -19,34 +14,9 @@ import urllib.request
 import urllib.error
 
 CONFIG_DIR = os.path.expanduser("~/.hence")
-TOKEN_FILE = os.path.join(CONFIG_DIR, "token")
 CREDENTIALS_FILE = os.path.join(CONFIG_DIR, "credentials")
 
 API_BASE = os.environ.get("HENCE_API_URL", "https://hence.sh")
-
-
-def save_token(token: str) -> None:
-    """Save an API key to the legacy token file."""
-    os.makedirs(CONFIG_DIR, exist_ok=True)
-    with open(TOKEN_FILE, "w") as f:
-        f.write(token.strip())
-    print("Authenticated successfully. API key saved to ~/.hence/token")
-
-
-def load_token() -> str:
-    """Load and return the stored token (legacy), or exit with an error."""
-    if not os.path.isfile(TOKEN_FILE):
-        print(
-            "Error: Not authenticated. Run auth.py first, or get a token at hence.sh/settings",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    with open(TOKEN_FILE) as f:
-        token = f.read().strip()
-    if not token:
-        print("Error: Token file is empty. Run auth.py to set a new token.", file=sys.stderr)
-        sys.exit(1)
-    return token
 
 
 def save_credentials(access_token: str, refresh_token: str, expires_in: int) -> None:
@@ -88,7 +58,7 @@ def refresh_access_token(refresh_token: str) -> dict | None:
 
 
 def get_token() -> str:
-    """Get a valid access token, refreshing if needed. Falls back to legacy token file."""
+    """Get a valid access token, refreshing if needed."""
     creds = load_credentials()
     if creds:
         # Check if access token is still valid (with 60s buffer)
@@ -105,8 +75,8 @@ def get_token() -> str:
                     result.get("expires_in", 3600),
                 )
                 return result["access_token"]
-    # Fall back to legacy token
-    return load_token()
+    print("Not authenticated. Run: python auth.py", file=sys.stderr)
+    sys.exit(1)
 
 
 def start_device_flow() -> None:
@@ -193,17 +163,13 @@ def start_device_flow() -> None:
 
 
 def main():
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--check":
-            creds = load_credentials()
-            if creds:
-                print("Credentials found (OAuth device flow).")
-                return
-            token = load_token()
-            print(f"API key found: {token[:8]}...")
-            return
-        # Direct token/key argument — save as legacy
-        save_token(sys.argv[1])
+    if len(sys.argv) > 1 and sys.argv[1] == "--check":
+        creds = load_credentials()
+        if creds:
+            print("Credentials found.")
+        else:
+            print("Not authenticated. Run: python auth.py", file=sys.stderr)
+            sys.exit(1)
     else:
         start_device_flow()
 

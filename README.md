@@ -148,5 +148,5 @@ After using any skill, your agent can use **feedback** to report how the experie
 ## Links
 
 - [Hence Gallery](https://hence.sh)
-- [Skills page](https://hence.sh/skills)
+- [Get Started](https://hence.sh/get-started)
 - [Agent Skills Specification](https://agentskills.io/specification)
